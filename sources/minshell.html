@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <title>SDL web game</title>
+
+    <meta name="title" content="SDL web game">
+    <meta name="description" content="New web videogame, developed using SDL library">
+    <meta name="keywords" content="SDL, games, html5, programming, C, C++, library, learn, videogames">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- Open Graph metatags for sharing -->
+    <meta property="og:title" content="raylib web game">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image" content="https://www.libsdl.org/media/SDL_logo.png">
+    <meta property="og:site_name" content="libsdl.com">
+    <meta property="og:url" content="https://www.libsdl.com">
+    <meta property="og:description" content="New web videogame, developed using SDL videogames library">
+
+    <!-- Twitter metatags for sharing -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@larsonjj">
+    <meta name="twitter:title" content="SDL web game">
+    <meta name="twitter:image" content="https://www.libsdl.org/media/SDL_logo.png">
+    <meta name="twitter:url" content="https://www.libsdl.com">
+    <meta name="twitter:description" content="New web game, developed using SDL videogames library">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="https://www.libsdl.org/favicon.ico">
+
+    <style>
+        body {
+            margin: 0;
+            text-align: center;
+        }
+
+        canvas.emscripten {
+            border: 0 none;
+            background-color: black;
+        }
+    </style>
+</head>
+<body>
+<canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" tabindex="-1"></canvas>
+<p id="output"></p>
+<script>
+    var Module = {
+        print: (function () {
+            var element = document.getElementById('output');
+            if (element) element.value = ''; // clear browser cache
+            return function (text) {
+                if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
+                console.log(text);
+                if (element) {
+                    element.value += text + "\n";
+                    element.scrollTop = element.scrollHeight; // focus on bottom
+                }
+            };
+        })(),
+        canvas: document.getElementById('canvas'),
+    };
+</script>
+{{{ SCRIPT }}}
+</body>
+</html>

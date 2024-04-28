@@ -1,0 +1,9 @@
+# CMake generated files
+build
+
+# IDEs
+.vscode
+.idea
+
+# OS generated files
+.DS_Store
