@@ -38,11 +38,16 @@ int main(int argc, char *argv[]) {
     // Setup window
     SDL_Window *window =
             SDL_CreateWindow("SDL Demo!", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                             SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE);
+                             SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
     if (window == NULL) {
         printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
         return EXIT_FAILURE;
     }
+
+    SDL_SetHint(SDL_HINT_OPENGL_ES_DRIVER, "1");
+
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
 
     // Setup renderer
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
@@ -51,6 +56,13 @@ int main(int argc, char *argv[]) {
         printf("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
         return EXIT_FAILURE;
     }
+
+    SDL_RendererInfo rendererInfo;
+    SDL_GetRendererInfo(renderer, &rendererInfo);
+
+    // Print SDL renderer
+    printf("SDL Renderer: %s\n", SDL_GetCurrentVideoDriver());
+    printf("SDL Renderer Info: %s\n", rendererInfo.name);
 
     // Setup and run the game
     run_game(renderer);
