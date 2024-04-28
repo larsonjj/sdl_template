@@ -1,0 +1,18 @@
+{
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+    "cmake.debugConfig": {
+        "args": [
+            // "--verbose",
+            // "true",
+            // "--filename",
+            // "${workspaceFolder}/app/test.json"
+        ],
+        "externalConsole": false
+    },
+    "editor.defaultFormatter": "xaver.clang-format",
+    "files.associations": {
+        "*.script": "lua",
+        "glad_gles2.h": "c"
+    }
+    // "cmake.buildDirectory": "${workspaceFolder}/build-${buildKit}",
+}

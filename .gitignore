@@ -2,7 +2,6 @@
 build
 
 # IDEs
-.vscode
 .idea
 
 # OS generated files

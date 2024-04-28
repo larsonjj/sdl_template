@@ -1,8 +1,13 @@
 cmake_minimum_required(VERSION 3.22.1) # Must be 3.22.1 to work with Android
-project(sdl_test VERSION 0.1.0)
+project(sdl_template
+        VERSION 0.1.0
+        DESCRIPTION "SDL2 template"
+        HOMEPAGE_URL "https://github.com/larsonjj/sdl_template"
+        LANGUAGES C)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_C_STANDARD 17)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+set(ANGLE_LIBRARY_DIR external/angle/macos/arm64)
 
 ##########################################################################################
 # Add dependencies with FetchContent
@@ -62,16 +67,32 @@ add_git_dependency(
 
 # Adding our source files
 # Define PROJECT_SOURCES as a list of all source files
-file(GLOB_RECURSE PROJECT_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_LIST_DIR}/sources/*.cpp")
+file(GLOB_RECURSE PROJECT_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_LIST_DIR}/sources/*.c")
 
 # Define PROJECT_INCLUDE to be the path to the include directory of the project
 set(PROJECT_INCLUDE "${CMAKE_CURRENT_LIST_DIR}/sources/")
+
+if (APPLE)
+    # Link required system frameworks for macOS
+    find_library(COCOA_LIBRARY Cocoa)
+    find_library(OPENGL_LIBRARY OpenGL)
+    find_library(IOKIT_LIBRARY IOKit)
+    find_library(CORE_FOUNDATION_LIBRARY CoreFoundation)
+    find_library(CORE_VIDEO_LIBRARY CoreVideo)
+    find_library(ANGLE_GLESv2_LIBRARY angle/libGLESv2.dylib PATHS ${ANGLE_LIBRARY_DIR})
+    find_library(ANGLE_EGL_LIBRARY angle/libEGL.dylib PATHS ${ANGLE_LIBRARY_DIR})
+endif()
 
 add_executable(${PROJECT_NAME})
 target_sources(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_INCLUDE})
 
-target_link_libraries(${PROJECT_NAME} SDL2::SDL2main SDL2::SDL2-static SDL2_image::SDL2_image-static SDL2_mixer::SDL2_mixer-static freetype SDL2_ttf::SDL2_ttf-static)
+if (APPLE)
+    target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2main SDL2::SDL2-static SDL2_image::SDL2_image-static SDL2_mixer::SDL2_mixer-static freetype SDL2_ttf::SDL2_ttf-static ${COCOA_LIBRARY} ${OPENGL_LIBRARY} ${IOKIT_LIBRARY} ${CORE_FOUNDATION_LIBRARY} ${CORE_VIDEO_LIBRARY})
+    file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/external/angle/macos/arm64/" DESTINATION "${CMAKE_BINARY_DIR}/angle")
+else()
+    target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2main SDL2::SDL2-static SDL2_image::SDL2_image-static SDL2_mixer::SDL2_mixer-static freetype SDL2_ttf::SDL2_ttf-static)
+endif()
 
 ##########################################################################################
 # Project build settings
