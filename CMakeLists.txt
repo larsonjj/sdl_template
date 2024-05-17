@@ -7,7 +7,6 @@ project(sdl_template
 
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
-set(ANGLE_LIBRARY_DIR external/angle/macos/arm64)
 
 ##########################################################################################
 # Add dependencies with FetchContent
@@ -31,7 +30,7 @@ option(BUILD_SHARED_LIBS "Build SDL2 as a shared library" OFF) # don't build the
 add_git_dependency(
         SDL2
         https://github.com/libsdl-org/SDL.git
-        release-2.28.2
+        release-2.30.3
 )
 
 # Add SDL Image
@@ -40,7 +39,7 @@ option(SDL2IMAGE_INSTALL "" OFF) # disable install target for SDL Image
 add_git_dependency(
         SDL2_image
         https://github.com/libsdl-org/SDL_image.git
-        release-2.6.3
+        release-2.8.2
 )
 
 # Add SDL Mixer
@@ -49,7 +48,7 @@ option(SDL2MIXER_BUILD_SHARED_LIBS "Build SDL2_Mixer as a shared library" OFF)
 add_git_dependency(
         SDL2_mixer
         https://github.com/libsdl-org/SDL_mixer.git
-        release-2.6.3
+        release-2.8.0
 )
 
 # Add SDL_TTF
@@ -58,7 +57,7 @@ option(SDL2TTF_VENDORED "" ON)
 add_git_dependency(
         SDL2_ttf
         https://github.com/libsdl-org/SDL_ttf.git
-        release-2.20.2
+        release-2.22.0
 )
 
 ##########################################################################################
@@ -79,8 +78,6 @@ if (APPLE)
     find_library(IOKIT_LIBRARY IOKit)
     find_library(CORE_FOUNDATION_LIBRARY CoreFoundation)
     find_library(CORE_VIDEO_LIBRARY CoreVideo)
-    find_library(ANGLE_GLESv2_LIBRARY libGLESv2.dylib PATHS ${ANGLE_LIBRARY_DIR})
-    find_library(ANGLE_EGL_LIBRARY libEGL.dylib PATHS ${ANGLE_LIBRARY_DIR})
 endif()
 
 add_executable(${PROJECT_NAME})
@@ -88,7 +85,7 @@ target_sources(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_INCLUDE})
 
 if (APPLE)
-    target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2main SDL2::SDL2-static SDL2_image::SDL2_image-static SDL2_mixer::SDL2_mixer-static freetype SDL2_ttf::SDL2_ttf-static ${COCOA_LIBRARY} ${OPENGL_LIBRARY} ${IOKIT_LIBRARY} ${CORE_FOUNDATION_LIBRARY} ${CORE_VIDEO_LIBRARY} ${ANGLE_GLESv2_LIBRARY} ${ANGLE_EGL_LIBRARY})
+    target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2main SDL2::SDL2-static SDL2_image::SDL2_image-static SDL2_mixer::SDL2_mixer-static freetype SDL2_ttf::SDL2_ttf-static ${COCOA_LIBRARY} ${OPENGL_LIBRARY} ${IOKIT_LIBRARY} ${CORE_FOUNDATION_LIBRARY} ${CORE_VIDEO_LIBRARY})
 else()
     target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2main SDL2::SDL2-static SDL2_image::SDL2_image-static SDL2_mixer::SDL2_mixer-static freetype SDL2_ttf::SDL2_ttf-static)
 endif()
