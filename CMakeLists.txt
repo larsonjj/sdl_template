@@ -8,6 +8,9 @@ project(sdl_template
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
+# Export compile commands for use with clangd
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 ##########################################################################################
 # Add dependencies with FetchContent
 ##########################################################################################
